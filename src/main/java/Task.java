@@ -7,12 +7,16 @@ public class Task {
         this.status = false;
     }
 
-    public void mark() {
-        this.status = !status;
+    public void markDone() {
+        this.status = true;
+    }
+
+    public void markUndone() {
+        this.status = false;
     }
 
     @Override
     public String toString() {
-        return status ? "[X] " + desc : "[ ]" + desc;
+        return status ? "[X] " + desc : "[ ] " + desc;
     }
 }

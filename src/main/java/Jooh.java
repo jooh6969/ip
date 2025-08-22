@@ -29,23 +29,54 @@ public class Jooh {
                 String[] parts = input.split(" ");
                 int idx = Integer.parseInt(parts[1]) - 1;
                 Task t = task.get(idx);
-                t.mark();
+                t.markDone();
                 System.out.println("Nice! I've marked this task as done:");
                 System.out.println(t);
             } else if (input.startsWith("unmark ")){
                 String[] parts = input.split(" ");
                 int idx = Integer.parseInt(parts[1]) - 1;
                 Task t = task.get(idx);
-                t.mark();
+                t.markUndone();
                 System.out.println("OK, I've marked this task as not done yet:");
                 System.out.println(t);
-            } else {
-                task.add(new Task(input));
+            } else if (input.toLowerCase().startsWith("todo ")) {
+                String desc = input.substring(5).trim(); // after "todo "
+                Task t = new Todo(desc);
+                task.add(t);
                 System.out.println(line);
-                System.out.println("added: " + input);
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  " + t);
+                System.out.println("Now you have " + task.size() + " tasks in the list.");
+                System.out.println(line);
+            } else if (input.toLowerCase().startsWith("deadline ")) {
+                String body = input.substring(9).trim();
+                String[] parts = body.split("/by", 2);
+                String desc = parts[0].trim();
+                String by = parts[1].trim();
+                Task t = new Deadline(desc, by);
+                task.add(t);
+                System.out.println(line);
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  " + t);
+                System.out.println("Now you have " + task.size() + " tasks in the list.");
+                System.out.println(line);
+            } else if (input.toLowerCase().startsWith("event ")) {
+                String body = input.substring(6).trim();
+                String[] first = body.split("/from", 2);
+                String desc = first[0].trim();
+                String[] second = first[1].split("/to", 2);
+                String from = second[0].trim();
+                String to = second[1].trim();
+                Task t = new Event(desc, from, to);
+                task.add(t);
+                System.out.println(line);
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  " + t);
+                System.out.println("Now you have " + task.size() + " tasks in the list.");
                 System.out.println(line);
             }
-        }
+
+    }
         sc.close();
 
 
