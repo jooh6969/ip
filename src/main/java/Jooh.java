@@ -54,6 +54,25 @@ public class Jooh {
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println("  " + t);
                     System.out.println(line);
+                } else if (cmd.equals("delete")) {
+                    if (arg.isEmpty()) {
+                        throw new JoohException("Task number must be provided.");
+                    }
+                    int n;
+                    try {
+                        n = Integer.parseInt(arg);
+                    } catch (NumberFormatException e) {
+                        throw new JoohException("Task number must be a positive integer.");
+                    }
+                    if (n < 1 || n > task.size()) {
+                        throw new JoohException("No task #" + n + " exists.");
+                    }
+                    String rmv = task.get(n - 1).toString();
+                    task.remove(n - 1);
+                    System.out.println(line);
+                    System.out.println("Noted. I've removed this task");
+                    System.out.println(rmv);
+                    System.out.println(line);
                 } else if (cmd.equals("unmark")) {
                     if (arg.isEmpty()) {
                         throw new JoohException("Task number must be provided.");
