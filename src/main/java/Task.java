@@ -1,22 +1,30 @@
 public class Task {
     private String desc;
-    private Boolean status;
+    private Boolean isDone;
 
-    public Task(String desc) {
+    public Task(String desc, Boolean isDone) {
         this.desc = desc;
-        this.status = false;
+        this.isDone = isDone;
     }
 
     public void markDone() {
-        this.status = true;
+        this.isDone = true;
     }
 
     public void markUndone() {
-        this.status = false;
+        this.isDone = false;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public Boolean getIsDone() {
+        return isDone;
     }
 
     @Override
     public String toString() {
-        return status ? "[X] " + desc : "[ ] " + desc;
+        return this.isDone ? "[X] " + desc : "[ ] " + desc;
     }
 }
