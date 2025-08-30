@@ -1,7 +1,7 @@
 import java.util.Locale;
 
 //class splits the input up and returns me a parsed object, can access the fields for the constructors of task
-public class InputParser {
+public class Parser {
     public enum Type {
         BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE,
     }
