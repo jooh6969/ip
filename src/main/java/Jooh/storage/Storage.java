@@ -1,3 +1,9 @@
+package Jooh.storage;
+
+import Jooh.task.Task;
+import Jooh.task.Deadline;
+import Jooh.task.Todo;
+import Jooh.task.Event;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;

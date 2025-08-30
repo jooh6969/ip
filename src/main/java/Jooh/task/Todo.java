@@ -1,4 +1,6 @@
-public class Todo extends Task{
+package Jooh.task;
+
+public class Todo extends Task {
     public Todo(String desc, Boolean isDone) {
         super(desc, isDone);
     }

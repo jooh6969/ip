@@ -1,3 +1,15 @@
+package Jooh;
+
+import Jooh.ui.Ui;
+import Jooh.storage.Storage;
+import Jooh.parser.Parser;
+import Jooh.task.Task;
+import Jooh.task.TaskList;
+import Jooh.task.Todo;
+import Jooh.task.Deadline;
+import Jooh.task.Event;
+import Jooh.exception.JoohException;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;

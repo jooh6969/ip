@@ -1,3 +1,6 @@
+package Jooh.ui;
+
+import Jooh.task.Task;
 import java.util.stream.IntStream;
 import java.util.List;
 

@@ -1,3 +1,9 @@
+package Jooh.parser;
+
+import Jooh.exception.EmptyDescriptionException;
+import Jooh.exception.InvalidDeadlineException;
+import Jooh.exception.InvalidEventTimelineException;
+import Jooh.exception.JoohException;
 import java.util.Locale;
 
 //class splits the input up and returns me a parsed object, can access the fields for the constructors of task
@@ -103,17 +109,17 @@ public class Parser {
                 case "unmark":
                 case "delete": {
                     if (rest.isEmpty()) {
-                        throw new JoohException("Task number must be provided.");
+                        throw new JoohException("Jooh.task.Task number must be provided.");
                     }
                     int n;
                     try {
                         n = Integer.parseInt(rest);
                     }
                     catch (NumberFormatException e) {
-                        throw new JoohException("Task number must be a positive integer.");
+                        throw new JoohException("Jooh.task.Task number must be a positive integer.");
                     }
                     if (n < 1) {
-                        throw new JoohException("Task number must be positive.");
+                        throw new JoohException("Jooh.task.Task number must be positive.");
                     }
                     if (cmd.equals("mark"))   {
                         return Parsed.mark(n);
