@@ -13,6 +13,7 @@ import Jooh.exception.JoohException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+// Code follows SE-EDU Java coding standards
 
 /**
  * Entry point for the Jooh chatbot application.
