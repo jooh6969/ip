@@ -105,6 +105,11 @@ public class Jooh {
                         ui.taskRemovedMsg(rmv);
                         break;
                     }
+                    case FIND: {
+                        List<Task> matches = taskList.findTasks(p.desc);
+                        ui.findTasksMsg(matches);
+                        break;
+                    }
                 }
             } catch (JoohException e) {
                 System.out.println(e.getMessage());

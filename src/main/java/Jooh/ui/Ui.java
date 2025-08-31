@@ -98,5 +98,23 @@ public class Ui {
         System.out.println(rmv);
         System.out.println(line);
     }
+    /**
+     * Prints the tasks that match a search keyword.
+     *
+     * @param matches The list of matching tasks.
+     */
+    public void findTasksMsg(List<Task> matches) {
+        System.out.println(line);
+        if (matches.isEmpty()) {
+            System.out.println("No matching tasks found.");
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (int i = 0; i < matches.size(); i++) {
+                System.out.println((i + 1) + ". " + matches.get(i));
+            }
+        }
+        System.out.println(line);
+    }
+
 }
 

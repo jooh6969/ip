@@ -97,4 +97,19 @@ public class TaskList {
     public String getTaskAsString(int n) {
         return tasks.get(n).toString();
     }
+    /**
+     * Returns a list of tasks whose descriptions contain the given keyword.
+     *
+     * @param desc The keyword to search for.
+     * @return A list of matching tasks.
+     */
+    public List<Task> findTasks(String desc) {
+        List<Task> result = new ArrayList<>();
+        for (Task t : tasks) {
+            if (t.getDesc().toLowerCase().contains(desc.toLowerCase())) {
+                result.add(t);
+            }
+        }
+        return result;
+    }
 }

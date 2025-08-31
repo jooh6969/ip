@@ -15,7 +15,7 @@ public class Parser {
      * Represents the set of valid command types supported by Jooh.
      */
     public enum Type {
-        BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE,
+        BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, FIND
     }
     /**
      * Immutable result of parsing a user input string.
@@ -113,6 +113,15 @@ public class Parser {
             return new Parsed(Type.DELETE, null, null, null, null, i);
         }
         /**
+         * Creates a parsed representation of a 'find' command.
+         *
+         * @param keyword The keyword to search for in task descriptions.
+         * @return A {@code Parsed} instance of type FIND containing the keyword.
+         */
+        public static Parsed find(String keyword) {
+            return new Parsed(Type.FIND, keyword, null, null, null, null);
+        }
+        /**
          * Parses a raw user input string into a structured Parsed object.
          * Splits the input into command keyword and arguments, validates them,
          * and constructs the appropriate Parsed instance.
@@ -195,6 +204,12 @@ public class Parser {
                         return Parsed.unmark(n);
                     }
                     return Parsed.delete(n);
+                }
+                case "find": {
+                    if (rest.isEmpty()) {
+                        throw new JoohException("Please provide a description to search for.");
+                    }
+                    return Parsed.find(rest);
                 }
                 default: {
                     throw new JoohException("Unknown command: " + cmd);
