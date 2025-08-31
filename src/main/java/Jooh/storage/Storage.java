@@ -11,10 +11,19 @@ import java.nio.file.Paths;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Handles persistence of tasks by reading from and writing to a text file.
+ * Provides encoding and decoding logic to translate between in-memory tasks
+ * and their serialized string representation on disk.
+ */
 public class Storage {
     private final Path file = Paths.get("data", "Jooh.txt");
-
+    /**
+     * Ensures that the data directory and storage file exist.
+     * Creates them if they do not already exist.
+     *
+     * @throws IOException If an I/O error occurs while creating files or directories.
+     */
     private void checkFiles() throws IOException {
         Path parent = file.getParent();
         if (parent != null && Files.notExists(parent)) {
@@ -24,7 +33,12 @@ public class Storage {
             Files.createFile(file);
         }
     }
-
+    /**
+     * Loads all tasks from the storage file into memory.
+     *
+     * @return A list of tasks reconstructed from the file.
+     * @throws IOException If an I/O error occurs while reading the file.
+     */
     public List<Task> load() throws IOException {
         checkFiles();
         List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
@@ -36,7 +50,13 @@ public class Storage {
         }
         return tasks;
     }
-
+    /**
+     * Saves the provided list of tasks to the storage file,
+     * overwriting any existing content.
+     *
+     * @param tasks The list of tasks to be persisted.
+     * @throws IOException If an I/O error occurs while writing to the file.
+     */
     public void save(List<Task> tasks) throws IOException {
         checkFiles();
         List<String> out = new ArrayList<>();
@@ -45,7 +65,13 @@ public class Storage {
         }
         Files.write(file, out, StandardCharsets.UTF_8);
     }
-
+    /**
+     * Encodes a single task into its serialized string form
+     * suitable for saving to the storage file.
+     *
+     * @param task The task to encode.
+     * @return A string representation of the task.
+     */
     private static String encode(Task task) {
         String done = task.getIsDone() ? "1" : "0";
         if (task instanceof Todo) {
@@ -59,7 +85,14 @@ public class Storage {
         }
     }
 
-    //reverts a line saved to a task
+    /**
+     * Decodes a serialized string back into a {@link Task}.
+     *
+     * @param task The string representation of a task.
+     * @return A task reconstructed from the string.
+     * @throws IllegalArgumentException If the input string is malformed or
+     *                                  does not represent a valid task.
+     */
     private static Task decode(String task) {
         String[] parsed = task.split("\\s*\\|\\s*");
         if (parsed.length < 3 ) {
@@ -93,6 +126,5 @@ public class Storage {
             }
         }
         return t;
-
     }
 }

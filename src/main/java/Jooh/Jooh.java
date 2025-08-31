@@ -14,7 +14,20 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Entry point for the Jooh chatbot application.
+ * Initializes the user interface, storage, and task list,
+ * then runs an interactive loop to process user commands until exit.
+ */
 public class Jooh {
+
+    /**
+     * Launches the Jooh chatbot.
+     * Sets up storage, loads previously saved tasks, and enters
+     * a command-processing loop that responds to user input.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         TaskList taskList = new TaskList();
@@ -37,7 +50,7 @@ public class Jooh {
                     case BYE: {
                         ui.goodbyeMsg();
                         sc.close();
-                        return; // exit main
+                        return;
                     }
                     case LIST: {
                         ui.listTasksMsg(taskList.getTaskList());
@@ -100,8 +113,8 @@ public class Jooh {
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
-
         }
     }
 }
+
 

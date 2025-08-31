@@ -5,13 +5,23 @@ import Jooh.exception.InvalidDeadlineException;
 import Jooh.exception.InvalidEventTimelineException;
 import Jooh.exception.JoohException;
 import java.util.Locale;
-
-//class splits the input up and returns me a parsed object, can access the fields for the constructors of task
+/**
+ * Utility class that interprets raw user input into structured commands.
+ * Provides parsing logic that maps strings to command types and arguments,
+ * returning {@code Parsed} objects for execution by the application.
+ */
 public class Parser {
+    /**
+     * Represents the set of valid command types supported by Jooh.
+     */
     public enum Type {
         BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE,
     }
-
+    /**
+     * Immutable result of parsing a user input string.
+     * Encapsulates the command type and any associated arguments such as
+     * description, deadline, timeline, or index.
+     */
     public static final class Parsed {
         public final Type type;
         public final String desc;
@@ -29,32 +39,89 @@ public class Parser {
             this.index = index;
         }
 
+        /**
+         * Creates a parsed representation of a 'bye' command.
+         *
+         * @return A Parsed instance of type BYE.
+         */
         public static Parsed bye() {
             return new Parsed(Type.BYE, null, null, null, null, null);
         }
+        /**
+         * Creates a parsed representation of a 'list' command.
+         *
+         * @return A Parsed instance of type LIST.
+         */
         public static Parsed list() {
             return new Parsed(Type.LIST, null, null, null, null, null);
         }
+        /**
+         * Creates a parsed representation of a 'todo' command.
+         *
+         * @param desc Description of the to-do task.
+         * @return A Parsed instance of type TODO with description.
+         */
         public static Parsed todo(String desc) {
             return new Parsed(Type.TODO, desc, null, null, null, null);
         }
+        /**
+         * Creates a parsed representation of a 'deadline' command.
+         *
+         * @param desc Description of the task.
+         * @param by   Deadline string.
+         * @return A Parsed instance of type DEADLINE with description and deadline.
+         */
         public static Parsed deadline(String desc, String by) {
             return new Parsed(Type.DEADLINE, desc, by, null, null, null);
         }
+        /**
+         * Creates a parsed representation of an 'event' command.
+         *
+         * @param desc Description of the event.
+         * @param from Event start time string.
+         * @param to   Event end time string.
+         * @return A Parsed instance of type EVENT with description and time range.
+         */
         public static Parsed event(String desc, String from, String to) {
             return new Parsed(Type.EVENT, desc, null, from, to, null);
         }
+        /**
+         * Creates a parsed representation of a 'mark' command.
+         *
+         * @param i 1-based index of the task to mark as done.
+         * @return A Parsed instance of type MARK with index.
+         */
         public static Parsed mark(int i) {
             return new Parsed(Type.MARK, null, null, null, null, i);
         }
+        /**
+         * Creates a parsed representation of an 'unmark' command.
+         *
+         * @param i 1-based index of the task to mark as not done.
+         * @return A Parsed instance of type UNMARK with index.
+         */
         public static Parsed unmark(int i) {
             return new Parsed(Type.UNMARK, null, null, null, null, i);
         }
+        /**
+         * Creates a parsed representation of a 'delete' command.
+         *
+         * @param i 1-based index of the task to delete.
+         * @return A Parsed instance of type DELETE with index.
+         */
         public static Parsed delete(int i) {
             return new Parsed(Type.DELETE, null, null, null, null, i);
         }
-
-        //method here breaks the inputs, passes parts to constructor
+        /**
+         * Parses a raw user input string into a structured Parsed object.
+         * Splits the input into command keyword and arguments, validates them,
+         * and constructs the appropriate Parsed instance.
+         *
+         * @param input Raw command line entered by the user.
+         * @return A Parsed representation of the command.
+         * @throws JoohException If the input is empty, malformed, or violates
+         *                       expected command syntax.
+         */
         public static Parsed parse(String input) throws JoohException {
             if (input == null) input = "";
             input = input.trim();   //trim removes last spacing
@@ -132,7 +199,6 @@ public class Parser {
                 default: {
                     throw new JoohException("Unknown command: " + cmd);
                 }
-
             }
         }
     }
