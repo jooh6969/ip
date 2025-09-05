@@ -1,4 +1,4 @@
-package Jooh.task;
+package jooh.task;
 
 import java.util.ArrayList;
 import java.util.List;

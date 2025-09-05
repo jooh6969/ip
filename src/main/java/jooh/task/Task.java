@@ -1,4 +1,4 @@
-package Jooh.task;
+package jooh.task;
 /**
  * Represents the base type for all tasks in Jooh.
  * Stores a description and completion status, and provides

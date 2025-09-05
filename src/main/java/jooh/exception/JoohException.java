@@ -1,4 +1,4 @@
-package Jooh.exception;
+package jooh.exception;
 /**
  * Base exception type for all custom exceptions in the Jooh application.
  * Provides a unified way to signal recoverable, user-facing errors.

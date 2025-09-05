@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'checkstyle'
 }
 
 repositories {
@@ -28,7 +29,7 @@ test {
 }
 
 application {
-    mainClass.set("Jooh.Jooh")
+    mainClass.set("jooh.Jooh")
 }
 
 shadowJar {
@@ -38,4 +39,20 @@ shadowJar {
 
 run{
     standardInput = System.in
+}
+
+checkstyle {
+    toolVersion = '10.12.0'
+    configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+    configProperties = [
+            'suppressionFile': rootProject.file('config/checkstyle/suppressions.xml')
+    ]
+}
+
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = false
+        html.required = true
+    }
 }

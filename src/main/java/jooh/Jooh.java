@@ -1,18 +1,19 @@
-package Jooh;
-
-import Jooh.ui.Ui;
-import Jooh.storage.Storage;
-import Jooh.parser.Parser;
-import Jooh.task.Task;
-import Jooh.task.TaskList;
-import Jooh.task.Todo;
-import Jooh.task.Deadline;
-import Jooh.task.Event;
-import Jooh.exception.JoohException;
+package jooh;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+
+import jooh.exception.JoohException;
+import jooh.parser.Parser;
+import jooh.storage.Storage;
+import jooh.task.Deadline;
+import jooh.task.Event;
+import jooh.task.Task;
+import jooh.task.TaskList;
+import jooh.task.Todo;
+import jooh.ui.Ui;
+
 // Code follows SE-EDU Java coding standards
 
 /**
@@ -48,53 +49,55 @@ public class Jooh {
             try {
                 Parser.Parsed p = Parser.Parsed.parse(raw);
                 switch (p.type) {
-                    case BYE: {
+                    case BYE:
                         ui.goodbyeMsg();
                         sc.close();
                         return;
-                    }
-                    case LIST: {
+
+                    case LIST:
                         ui.listTasksMsg(taskList.getTaskList());
                         break;
-                    }
-                    case TODO: {
-                        Task t = new Todo(p.desc, false);
-                        taskList.addTask(t);
-                        ui.addTaskMsg(t, taskList.getSize());
+
+                    case TODO:
+                        Task t1 = new Todo(p.desc, false);
+                        taskList.addTask(t1);
+                        ui.addTaskMsg(t1, taskList.getSize());
                         break;
-                    }
-                    case DEADLINE: {
-                        Task t = new Deadline(p.desc, p.by, false);
-                        taskList.addTask(t);
-                        ui.addTaskMsg(t, taskList.getSize());
+
+                    case DEADLINE:
+                        Task t2 = new Deadline(p.desc, p.by, false);
+                        taskList.addTask(t2);
+                        ui.addTaskMsg(t2, taskList.getSize());
                         break;
-                    }
-                    case EVENT: {
-                        Task t = new Event(p.desc, p.from, p.to, false);
-                        taskList.addTask(t);
-                        ui.addTaskMsg(t, taskList.getSize());
+
+                    case EVENT:
+                        Task t3 = new Event(p.desc, p.from, p.to, false);
+                        taskList.addTask(t3);
+                        ui.addTaskMsg(t3, taskList.getSize());
                         break;
-                    }
+
                     case MARK: {
                         int n = p.index;
                         if (n > taskList.getSize()) {
                             throw new JoohException("Task doesn't exist...");
                         }
-                        Task t = taskList.getTask(n - 1);
+                        Task t4 = taskList.getTask(n - 1);
                         taskList.markTaskDone(n - 1);
-                        ui.taskMarkedDoneMsg(t);
+                        ui.taskMarkedDoneMsg(t4);
                         break;
                     }
+
                     case UNMARK: {
                         int n = p.index;
                         if (n > taskList.getSize()) {
                             throw new JoohException("Task doesn't exist...");
                         }
-                        Task t = taskList.getTask(n - 1);
+                        Task t5 = taskList.getTask(n - 1);
                         taskList.markTaskUndone(n - 1);
-                        ui.taskMarkedUndoneMsg(t);
+                        ui.taskMarkedUndoneMsg(t5);
                         break;
                     }
+
                     case DELETE: {
                         int n = p.index;
                         if (n > taskList.getSize()) {
@@ -105,11 +108,14 @@ public class Jooh {
                         ui.taskRemovedMsg(rmv);
                         break;
                     }
-                    case FIND: {
+
+                    case FIND:
                         List<Task> matches = taskList.findTasks(p.desc);
                         ui.findTasksMsg(matches);
                         break;
-                    }
+
+                    default:
+                        throw new JoohException("Unknown command type: " + p.type);
                 }
             } catch (JoohException e) {
                 System.out.println(e.getMessage());

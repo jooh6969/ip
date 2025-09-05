@@ -1,4 +1,4 @@
-package Jooh.task;
+package jooh.task;
 
 /**
  * Represents a to-do task.

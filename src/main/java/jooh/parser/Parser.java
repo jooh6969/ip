@@ -1,10 +1,12 @@
-package Jooh.parser;
+package jooh.parser;
 
-import Jooh.exception.EmptyDescriptionException;
-import Jooh.exception.InvalidDeadlineException;
-import Jooh.exception.InvalidEventTimelineException;
-import Jooh.exception.JoohException;
 import java.util.Locale;
+
+import jooh.exception.EmptyDescriptionException;
+import jooh.exception.InvalidDeadlineException;
+import jooh.exception.InvalidEventTimelineException;
+import jooh.exception.JoohException;
+
 /**
  * Utility class that interprets raw user input into structured commands.
  * Provides parsing logic that maps strings to command types and arguments,
@@ -132,28 +134,32 @@ public class Parser {
          *                       expected command syntax.
          */
         public static Parsed parse(String input) throws JoohException {
-            if (input == null) input = "";
-            input = input.trim();   //trim removes last spacing
-            if (input.isEmpty()) throw new JoohException("Please key in something...");
+            if (input == null) {
+                input = "";
+            }
+            input = input.trim(); //trim removes last spacing
+            if (input.isEmpty()) {
+                throw new JoohException("Please key in something...");
+            }
 
             // \\s+ is the regex for one or more white spaces
             String[] parts = input.split("\\s+", 2);
             String cmd = parts[0].toLowerCase(Locale.ROOT);
             String rest = parts.length > 1 ? parts[1].trim() : "";
 
-            switch(cmd) {
-                case "bye": {
+            switch (cmd) {
+                case "bye":
                     return Parsed.bye();
-                }
-                case "list": {
+
+                case "list":
                     return Parsed.list();
-                }
-                case "todo": {
+
+                case "todo":
                     if (rest.isEmpty()) {
                         throw new EmptyDescriptionException("todo");
                     }
                     return Parsed.todo(rest);
-                }
+
                 case "deadline": {
                     String[] pair = rest.split("(?i)\\s*/by\\s+", 2);
                     String desc = pair.length > 0 ? pair[0].trim() : "";
@@ -166,6 +172,7 @@ public class Parser {
                     }
                     return Parsed.deadline(desc, by);
                 }
+
                 case "event": {
                     String[] pair = rest.split("(?i)\\s*/from\\s+", 2);
                     String desc = pair.length > 0 ? pair[0].trim() : "";
@@ -181,40 +188,41 @@ public class Parser {
                     }
                     return Parsed.event(desc, from, to);
                 }
+
                 case "mark":
                 case "unmark":
                 case "delete": {
                     if (rest.isEmpty()) {
                         throw new JoohException("Jooh.task.Task number must be provided.");
                     }
-                    int n;
+                    final int n;
                     try {
                         n = Integer.parseInt(rest);
-                    }
-                    catch (NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         throw new JoohException("Jooh.task.Task number must be a positive integer.");
                     }
                     if (n < 1) {
                         throw new JoohException("Jooh.task.Task number must be positive.");
                     }
-                    if (cmd.equals("mark"))   {
+                    if ("mark".equals(cmd)) {
                         return Parsed.mark(n);
                     }
-                    if (cmd.equals("unmark")) {
+                    if ("unmark".equals(cmd)) {
                         return Parsed.unmark(n);
                     }
                     return Parsed.delete(n);
                 }
-                case "find": {
+
+                case "find":
                     if (rest.isEmpty()) {
                         throw new JoohException("Please provide a description to search for.");
                     }
                     return Parsed.find(rest);
-                }
-                default: {
+
+                default:
                     throw new JoohException("Unknown command: " + cmd);
-                }
             }
         }
     }
 }
+
