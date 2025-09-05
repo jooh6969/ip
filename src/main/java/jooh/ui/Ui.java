@@ -12,7 +12,7 @@ import jooh.task.Task;
  * string-returning counterparts for GUI usage.
  */
 public class Ui {
-    private final String line = "____________________________________________________________________________________";
+    private final String line = "_______________________________________";
 
     // =========================================================================
     // String formatters (for GUI)
