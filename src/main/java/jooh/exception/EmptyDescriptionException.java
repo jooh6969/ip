@@ -1,4 +1,4 @@
-package Jooh.exception;
+package jooh.exception;
 /**
  * Exception thrown when the user provides an empty description
  * for a task-creating command (e.g., todo, deadline, event).

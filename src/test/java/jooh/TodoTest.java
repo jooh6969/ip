@@ -1,7 +1,8 @@
-package Jooh;
+package jooh;
 
-import Jooh.task.Todo;
 import org.junit.jupiter.api.Test;
+import jooh.task.Todo;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TodoTest {

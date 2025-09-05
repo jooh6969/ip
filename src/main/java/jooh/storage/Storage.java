@@ -1,16 +1,18 @@
-package Jooh.storage;
+package jooh.storage;
 
-import Jooh.task.Task;
-import Jooh.task.Deadline;
-import Jooh.task.Todo;
-import Jooh.task.Event;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import jooh.task.Deadline;
+import jooh.task.Event;
+import jooh.task.Task;
+import jooh.task.Todo;
+
 /**
  * Handles persistence of tasks by reading from and writing to a text file.
  * Provides encoding and decoding logic to translate between in-memory tasks
@@ -18,6 +20,7 @@ import java.util.List;
  */
 public class Storage {
     private final Path file = Paths.get("data", "Jooh.txt");
+
     /**
      * Ensures that the data directory and storage file exist.
      * Creates them if they do not already exist.
@@ -33,6 +36,7 @@ public class Storage {
             Files.createFile(file);
         }
     }
+
     /**
      * Loads all tasks from the storage file into memory.
      *
@@ -45,11 +49,14 @@ public class Storage {
         List<Task> tasks = new ArrayList<>();
         for (String raw : lines) {
             String line = raw.trim();
-            if (line.isEmpty()) continue;
+            if (line.isEmpty()) {
+                continue;
+            }
             tasks.add(decode(line));
         }
         return tasks;
     }
+
     /**
      * Saves the provided list of tasks to the storage file,
      * overwriting any existing content.
@@ -65,6 +72,7 @@ public class Storage {
         }
         Files.write(file, out, StandardCharsets.UTF_8);
     }
+
     /**
      * Encodes a single task into its serialized string form
      * suitable for saving to the storage file.
@@ -95,35 +103,34 @@ public class Storage {
      */
     private static Task decode(String task) {
         String[] parsed = task.split("\\s*\\|\\s*");
-        if (parsed.length < 3 ) {
+        if (parsed.length < 3) {
             throw new IllegalArgumentException("Line's broken");
         }
         String type = parsed[0];
         Boolean done = "1".equals(parsed[1]);
         String desc = parsed[2];
         Task t;
-        switch(type) {
-            case "T": {
+        switch (type) {
+            case "T":
                 t = new Todo(desc, done);
                 break;
-            }
-            case "D": {
+
+            case "D":
                 if (parsed.length < 4) {
                     throw new IllegalArgumentException("Line's broken");
                 }
                 t = new Deadline(desc, parsed[3], done);
                 break;
-            }
-            case "E": {
+
+            case "E":
                 if (parsed.length < 5) {
                     throw new IllegalArgumentException("Line's broken");
                 }
                 t = new Event(desc, parsed[3], parsed[4], done);
                 break;
-            }
-            default: {
+
+            default:
                 throw new IllegalArgumentException("Unknown task type");
-            }
         }
         return t;
     }

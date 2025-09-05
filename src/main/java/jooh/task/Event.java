@@ -1,4 +1,4 @@
-package Jooh.task;
+package jooh.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -40,6 +40,7 @@ public class Event extends Task {
                 "yyyy-MM-dd HH:mm",
                 "MM/dd/yyyy HH:mm"
         };
+
         for (String format :dateFormats) {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);

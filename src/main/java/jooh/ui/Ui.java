@@ -1,8 +1,10 @@
-package Jooh.ui;
+package jooh.ui;
 
-import Jooh.task.Task;
-import java.util.stream.IntStream;
 import java.util.List;
+import java.util.stream.IntStream;
+
+import jooh.task.Task;
+
 
 /**
  * Handles all user interface interactions for Jooh.

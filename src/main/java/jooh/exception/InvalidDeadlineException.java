@@ -1,4 +1,4 @@
-package Jooh.exception;
+package jooh.exception;
 /**
  * Exception thrown when a deadline command is missing the required
  * "/by" part or has no deadline information provided.
