@@ -144,6 +144,7 @@ public class Parser {
 
             // \\s+ is the regex for one or more white spaces
             String[] parts = input.split("\\s+", 2);
+            assert parts.length >= 1 : "Split must always produce at least one token";
             String cmd = parts[0].toLowerCase(Locale.ROOT);
             String rest = parts.length > 1 ? parts[1].trim() : "";
 
@@ -220,6 +221,7 @@ public class Parser {
                     return Parsed.find(rest);
 
                 default:
+                    assert false : "Unhandled command reached: " + cmd;
                     throw new JoohException("Unknown command: " + cmd);
             }
         }
