@@ -48,6 +48,7 @@ public class Jooh {
             String raw = sc.nextLine();
             try {
                 Parser.Parsed p = Parser.Parsed.parse(raw);
+                assert p != null : "Parsed command must not be null";
                 switch (p.type) {
                     case BYE:
                         ui.goodbyeMsg();
@@ -59,18 +60,24 @@ public class Jooh {
                         break;
 
                     case TODO:
+                        assert p.desc != null && !p.desc.isEmpty() : "Todo description must not be empty";
                         Task t1 = new Todo(p.desc, false);
                         taskList.addTask(t1);
                         ui.addTaskMsg(t1, taskList.getSize());
                         break;
 
                     case DEADLINE:
+                        assert p.desc != null && !p.desc.isEmpty() : "Deadline description must not be empty";
+                        assert p.by != null && !p.by.isEmpty() : "Deadline 'by' must not be empty";
                         Task t2 = new Deadline(p.desc, p.by, false);
                         taskList.addTask(t2);
                         ui.addTaskMsg(t2, taskList.getSize());
                         break;
 
                     case EVENT:
+                        assert p.desc != null && !p.desc.isEmpty() : "Event description must not be empty";
+                        assert p.from != null && !p.from.isEmpty() : "Event 'from' must not be empty";
+                        assert p.to != null && !p.to.isEmpty() : "Event 'to' must not be empty";
                         Task t3 = new Event(p.desc, p.from, p.to, false);
                         taskList.addTask(t3);
                         ui.addTaskMsg(t3, taskList.getSize());
@@ -78,10 +85,12 @@ public class Jooh {
 
                     case MARK: {
                         int n = p.index;
+                        assert n > 0 : "Task index must be positive";
                         if (n > taskList.getSize()) {
                             throw new JoohException("Task doesn't exist...");
                         }
                         Task t4 = taskList.getTask(n - 1);
+                        assert t4 != null : "Task at index must exist";
                         taskList.markTaskDone(n - 1);
                         ui.taskMarkedDoneMsg(t4);
                         break;
@@ -115,6 +124,7 @@ public class Jooh {
                         break;
 
                     default:
+                        assert false : "Unexpected command type reached: " + p.type;
                         throw new JoohException("Unknown command type: " + p.type);
                 }
             } catch (JoohException e) {
