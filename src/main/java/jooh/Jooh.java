@@ -7,11 +7,7 @@ import java.util.Scanner;
 import jooh.exception.JoohException;
 import jooh.parser.Parser;
 import jooh.storage.Storage;
-import jooh.task.Deadline;
-import jooh.task.Event;
-import jooh.task.Task;
-import jooh.task.TaskList;
-import jooh.task.Todo;
+import jooh.task.*;
 import jooh.ui.Ui;
 
 // Code follows SE-EDU Java coding standards, checked for code quality violations
@@ -48,6 +44,7 @@ public class Jooh {
             String raw = sc.nextLine();
             try {
                 Parser.Parsed p = Parser.Parsed.parse(raw);
+                System.out.println("DEBUG Parsed type = " + p.type);
                 assert p != null : "Parsed command must not be null";
                 switch (p.type) {
                     case BYE:
@@ -122,6 +119,15 @@ public class Jooh {
                         List<Task> matches = taskList.findTasks(p.desc);
                         ui.findTasksMsg(matches);
                         break;
+
+                    case FIXED: {
+                        assert p.desc != null && !p.desc.isEmpty() : "Fixed task description must not be empty";
+                        assert p.duration != null && !p.duration.isEmpty() : "Fixed task duration must not be empty";
+                        Task t = new Fixed(p.desc, false, p.duration);
+                        taskList.addTask(t);
+                        ui.addTaskMsg(t, taskList.getSize());
+                        break;
+                    }
 
                     default:
                         assert false : "Unexpected command type reached: " + p.type;

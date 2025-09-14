@@ -8,10 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import jooh.task.Deadline;
-import jooh.task.Event;
-import jooh.task.Task;
-import jooh.task.Todo;
+import jooh.task.*;
 
 /**
  * Handles persistence of tasks by reading from and writing to a text file.
@@ -87,6 +84,9 @@ public class Storage {
         } else if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
             return String.join(" | ", "D", done, deadline.getDesc(), deadline.getDeadline());
+        } else if (task instanceof Fixed) {
+            Fixed fixed = (Fixed) task;
+            return String.join(" | ", "F", done, fixed.getDesc(), fixed.getDuration());
         } else {
             Event event = (Event) task;
             return String.join(" | ", "E", done, event.getDesc(), event.getFrom(), event.getTo());
@@ -127,6 +127,12 @@ public class Storage {
                     throw new IllegalArgumentException("Line's broken");
                 }
                 t = new Event(desc, parsed[3], parsed[4], done);
+                break;
+            case "F":
+                if (parsed.length < 4) {
+                    throw new IllegalArgumentException("Line's broken");
+                }
+                t = new Fixed(desc, done, parsed[3]);
                 break;
 
             default:

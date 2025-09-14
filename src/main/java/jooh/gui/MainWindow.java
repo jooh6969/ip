@@ -3,6 +3,7 @@ package jooh.gui;
 import java.io.IOException;
 import java.util.List;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,14 +12,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 
+import javafx.util.Duration;
 import jooh.exception.JoohException;
 import jooh.parser.Parser;
 import jooh.storage.Storage;
-import jooh.task.Deadline;
-import jooh.task.Event;
-import jooh.task.Task;
-import jooh.task.TaskList;
-import jooh.task.Todo;
+import jooh.task.*;
 import jooh.ui.Ui;
 
 public class MainWindow {
@@ -82,7 +80,9 @@ public class MainWindow {
                     // Save before exit
                     try { storage.save(taskList.getTaskList()); } catch (IOException ignored) {}
                     // Close after a short tick to let UI render the last message
-                    Platform.runLater(Platform::exit);
+                    PauseTransition delay = new PauseTransition(Duration.seconds(2)); // 2 second delay
+                    delay.setOnFinished(event -> Platform.exit());
+                    delay.play();
                     return;
 
                 case LIST:
@@ -140,6 +140,13 @@ public class MainWindow {
                 case FIND: {
                     List<Task> matches = taskList.findTasks(p.desc);
                     reply = ui.formatFindTasksMsg(matches);
+                    break;
+                }
+
+                case FIXED: {
+                    Task t = new Fixed(p.desc, false, p.duration);
+                    taskList.addTask(t);
+                    reply = ui.formatAddTaskMsg(t, taskList.getSize());
                     break;
                 }
 

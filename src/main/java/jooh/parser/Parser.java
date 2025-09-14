@@ -17,12 +17,12 @@ public class Parser {
      * Represents the set of valid command types supported by Jooh.
      */
     public enum Type {
-        BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, FIND
+        BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, FIND, FIXED
     }
     /**
      * Immutable result of parsing a user input string.
      * Encapsulates the command type and any associated arguments such as
-     * description, deadline, timeline, or index.
+     * description, deadline, timeline, index, or duration.
      */
     public static final class Parsed {
         public final Type type;
@@ -31,14 +31,17 @@ public class Parser {
         public final String from;
         public final String to;
         public final Integer index;
+        public final String duration;
 
-        private Parsed(Type type, String desc, String by, String from, String to, Integer index) {
+        private Parsed(Type type, String desc,
+                        String by, String from, String to, Integer index, String duration) {
             this.type = type;
             this.desc = desc;
             this.by = by;
             this.from = from;
             this.to = to;
             this.index = index;
+            this.duration = duration;
         }
 
         /**
@@ -47,7 +50,7 @@ public class Parser {
          * @return A Parsed instance of type BYE.
          */
         public static Parsed bye() {
-            return new Parsed(Type.BYE, null, null, null, null, null);
+            return new Parsed(Type.BYE, null, null, null, null, null, null);
         }
         /**
          * Creates a parsed representation of a 'list' command.
@@ -55,7 +58,7 @@ public class Parser {
          * @return A Parsed instance of type LIST.
          */
         public static Parsed list() {
-            return new Parsed(Type.LIST, null, null, null, null, null);
+            return new Parsed(Type.LIST, null, null, null, null, null, null);
         }
         /**
          * Creates a parsed representation of a 'todo' command.
@@ -64,7 +67,7 @@ public class Parser {
          * @return A Parsed instance of type TODO with description.
          */
         public static Parsed todo(String desc) {
-            return new Parsed(Type.TODO, desc, null, null, null, null);
+            return new Parsed(Type.TODO, desc, null, null, null, null, null);
         }
         /**
          * Creates a parsed representation of a 'deadline' command.
@@ -74,7 +77,7 @@ public class Parser {
          * @return A Parsed instance of type DEADLINE with description and deadline.
          */
         public static Parsed deadline(String desc, String by) {
-            return new Parsed(Type.DEADLINE, desc, by, null, null, null);
+            return new Parsed(Type.DEADLINE, desc, by, null, null, null, null);
         }
         /**
          * Creates a parsed representation of an 'event' command.
@@ -85,7 +88,7 @@ public class Parser {
          * @return A Parsed instance of type EVENT with description and time range.
          */
         public static Parsed event(String desc, String from, String to) {
-            return new Parsed(Type.EVENT, desc, null, from, to, null);
+            return new Parsed(Type.EVENT, desc, null, from, to, null, null);
         }
         /**
          * Creates a parsed representation of a 'mark' command.
@@ -94,7 +97,7 @@ public class Parser {
          * @return A Parsed instance of type MARK with index.
          */
         public static Parsed mark(int i) {
-            return new Parsed(Type.MARK, null, null, null, null, i);
+            return new Parsed(Type.MARK, null, null, null, null, i, null);
         }
         /**
          * Creates a parsed representation of an 'unmark' command.
@@ -103,7 +106,7 @@ public class Parser {
          * @return A Parsed instance of type UNMARK with index.
          */
         public static Parsed unmark(int i) {
-            return new Parsed(Type.UNMARK, null, null, null, null, i);
+            return new Parsed(Type.UNMARK, null, null, null, null, i, null);
         }
         /**
          * Creates a parsed representation of a 'delete' command.
@@ -112,7 +115,7 @@ public class Parser {
          * @return A Parsed instance of type DELETE with index.
          */
         public static Parsed delete(int i) {
-            return new Parsed(Type.DELETE, null, null, null, null, i);
+            return new Parsed(Type.DELETE, null, null, null, null, i, null);
         }
         /**
          * Creates a parsed representation of a 'find' command.
@@ -121,7 +124,24 @@ public class Parser {
          * @return A {@code Parsed} instance of type FIND containing the keyword.
          */
         public static Parsed find(String keyword) {
-            return new Parsed(Type.FIND, keyword, null, null, null, null);
+            return new Parsed(Type.FIND, keyword, null, null, null, null, null);
+        }
+        /**
+         * Creates a parsed representation of a 'fixed' command.
+         * <p>
+         * A fixed-duration task represents an unscheduled activity
+         * that requires a specified amount of time to complete,
+         * but does not have a fixed start or end date.
+         * </p>
+         *
+         * @param desc Description of the task.
+         * @param duration Duration string representing how long
+         *                 the task requires (e.g., "2 hours").
+         * @return A {@code Parsed} instance of type FIXED
+         *         containing the description and duration.
+         */
+        public static Parsed fixed(String desc, String duration) {
+            return new Parsed(Type.FIXED, desc, null, null, null, null, duration);
         }
         /**
          * Parses a raw user input string into a structured Parsed object.
@@ -219,6 +239,15 @@ public class Parser {
                         throw new JoohException("Please provide a description to search for.");
                     }
                     return Parsed.find(rest);
+
+                case "fixed":
+                    String[] pair = rest.split("(?i)\\s*/for\\s+", 2);
+                    String desc = pair.length > 0 ? pair[0].trim() : "";
+                    String duration = pair.length > 1 ? pair[1].trim() : "";
+                    if (desc.isEmpty() || duration.isEmpty()) {
+                        throw new JoohException("Fixed task requires description and duration.");
+                    }
+                    return Parsed.fixed(desc, duration);
 
                 default:
                     assert false : "Unhandled command reached: " + cmd;
