@@ -14,7 +14,7 @@ import jooh.task.TaskList;
 import jooh.task.Todo;
 import jooh.ui.Ui;
 
-// Code follows SE-EDU Java coding standards
+// Code follows SE-EDU Java coding standards, checked for code quality violations
 
 /**
  * Entry point for the Jooh chatbot application.
