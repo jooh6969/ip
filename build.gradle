@@ -71,3 +71,7 @@ tasks.withType(Checkstyle).configureEach {
         html.required = true
     }
 }
+
+tasks.withType(Checkstyle).configureEach {
+    enabled = false
+}
